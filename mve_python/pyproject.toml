@@ -1,0 +1,12 @@
+[project]
+name = "mve_python"
+requires-python = ">= 3.12"
+
+[tool.poetry]
+name = "mve_python"
+version = "0.1.0"
+description = ""
+authors = ["Erika Wiedemann <eburdon@users.noreply.github.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
