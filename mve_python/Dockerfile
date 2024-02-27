@@ -1,8 +1,4 @@
-FROM python:3.12-alpine3.19
-
-# A Dockerfile is simply a text-based file with no file extension
-# that contains a script of instructions. Docker uses this script
-# to build a container image.
+FROM python:3.12-alpine3.19 as builder
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1

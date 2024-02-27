@@ -12,13 +12,13 @@ docker build -t mve-node .
 docker run --rm -it --entrypoint /bin/sh mve-node:latest
 
 -- run compiled TS
-node build/getting_started.js
+$ node build/getting_started.js
 
 -- run original TS
-node src/getting_started.ts
+$ node src/getting_started.ts
 
 -- run plain JS
-node src_js/hello_world.js
+$ node src_js/hello_world.js
 ```
 
 ## Notes

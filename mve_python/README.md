@@ -23,6 +23,6 @@ $ python ./getting_started.py
 ### Other
 
 ```
--- immediately run main.py
+-- immediately run getting_started.py
 docker container run mve-python:latest
 ```
