@@ -1,5 +1,4 @@
 FROM python:3.12-alpine3.19
-# FROM python:3.12-slim
 
 # A Dockerfile is simply a text-based file with no file extension
 # that contains a script of instructions. Docker uses this script

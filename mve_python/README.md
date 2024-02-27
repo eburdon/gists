@@ -17,7 +17,7 @@ docker build -t mve-python .
 -- To run a disposable new container, you can simply attach a tty and standard input:
 docker run --rm -it --entrypoint /bin/sh mve-python:latest
 
-$ python ./main.py
+$ python ./getting_started.py
 ```
 
 ### Other
