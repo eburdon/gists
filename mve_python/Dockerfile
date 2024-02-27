@@ -28,4 +28,4 @@ RUN poetry config virtualenvs.create false
 
 RUN poetry install --no-dev
 
-CMD ["python", "main.py"]
+CMD ["python", "getting_started.py"]
