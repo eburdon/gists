@@ -1,0 +1,17 @@
+{
+  "name": "mve_node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "getting_started.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
