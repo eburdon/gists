@@ -28,3 +28,8 @@ $ go run src/getting_started.go
 -- immediately run getting_started.py
 docker container run mve-golang:latest
 ```
+
+## TODO
+
+1. Can I not use this offline? Re: pulling docker images. Cached? I thought it was forever.
+2. GOLANG `as builder` -> what sort of language builtins are there?

@@ -27,6 +27,7 @@ https://projectatomic.io/blog/2015/07/what-are-docker-none-none-images/
 ```
 
 On containers...
+
 ```
 -- creates a new container from the specified image (above) without starting it
 docker container create -i -t --name python-container mve-python
