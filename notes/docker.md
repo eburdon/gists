@@ -1,5 +1,10 @@
 # Docker Notes
 
+## QUESTIONS
+
+1. Can I not use this offline? Re: pulling docker images. Cached? I thought it was forever.
+
+
 On images...
 ```
 -- list files copied into image
@@ -49,6 +54,9 @@ Docker Multi-Stage Builds: An In-depth Guide: https://ercanermis.com/docker-mult
 * In the [build stage], clean up unnecessary files and artifacts after you’re done with them. This will make the build cache smaller and faster.
 
 ## GoLang
+
+* https://christiangiacomi.com/posts/multi-stage-docker-image-go/
+* https://tutorialedge.net/golang/go-multi-stage-docker-tutorial/ 
 
 ## Node (TS)
 

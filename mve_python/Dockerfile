@@ -1,8 +1,20 @@
+## Simple Dockerfile to create an image for a container to run any
+## Python MVE Script
+## (consistent, pre-built environment with any deps)
+
+# Good, lightweight default image
+# Don't need any tooling at all? github.com/GoogleContainerTools/distroless
+# NOTE: DOES NOT INCLUDE PKG MANAGERS OR SHELLS (`sh`, `bash`, `apk`)
 FROM python:3.12-alpine3.19 as builder
 
+# Add Maintainer Info
+LABEL maintainer="Erika Wiedemann"
+
+# TODO: FOLLOWUP
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
 
+# TODO: FOLLOWUP
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
