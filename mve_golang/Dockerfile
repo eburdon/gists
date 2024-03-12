@@ -20,7 +20,7 @@ LABEL maintainer="Erika Wiedemann"
 
 # Set the working directory. Indicates where all further commands should be run
 # Creates the directory.
-WORKDIR /build
+WORKDIR /app
 
 # Add when dependencies are added
 # COPY go.mod go.sum ./
@@ -30,21 +30,11 @@ COPY go.mod ./
 # Copy the source from the current directory to the Working Directory inside the container
 # RUN go mod download
 
-COPY ./ .
+RUN mkdir src
+COPY ./src ./src/
 
-# Sample; this allows the image to be run and immediately execute SOMETHING
-# rather than silently exiting. If this were production, this could be the
-# server binary generated in a `GO BUILD` command.
-CMD ["go", "run", "src/getting_started.go"]
+RUN mkdir build
+RUN CGO_ENABLED=0 go build -o build/getting_started ./src/getting_started.go
 
-################################################
-## Sample of what a Dockerfile would look like if I was building a binary to
-## run somewhere else, like on AWS Lambda
-# FROM golang:1.22-alpine3.19 as builder
-# WORKDIR /build
-# COPY go.mod go.sum ./
-# RUN go mod download
-# COPY ./ .
-# Compile the code
-# RUN CGO_ENABLED=0 go build -o ./main
-# CMD []
+# This could be copied out in a later docker stage for minimal size
+CMD ["./build/getting_started"]

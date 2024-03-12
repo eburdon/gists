@@ -18,13 +18,14 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
-RUN mkdir /src
+# Set the working directory. Indicates where all further commands should be run
+# Creates the directory.
+WORKDIR /app
 
-COPY /src /src
-COPY pyproject.toml /src
+# COPY /src /src
+COPY ./pyproject.toml ./
 
-WORKDIR /src
-ENV PYTHONPATH=${PYTHONPATH}:${PWD} 
+# ENV PYTHONPATH=${PYTHONPATH}:${PWD} 
 
 RUN pip3 install poetry
 
@@ -33,6 +34,19 @@ RUN pip3 install poetry
 # environment by using a docker image
 RUN poetry config virtualenvs.create false
 
+# dep installation
 RUN poetry install --no-dev
 
-CMD ["python", "getting_started.py"]
+RUN mkdir src
+COPY ./src ./src/
+
+# all dependencies installed to
+#       /usr/local/lib/python3.12/site-packages
+# to create a complete lambda build, .zip the deps and put it somewhere
+# a later docker stage can copy from. 
+#       zip -r ../../../../my_deployment_package.zip .
+# you'd also need to copy the function you want to run.
+#       cd ./src/
+#       zip my_deployment_package.zip lambda_function.py
+
+CMD ["python", "src/getting_started.py"]
