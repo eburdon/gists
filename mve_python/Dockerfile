@@ -1,3 +1,4 @@
+# new build stage AND set base stage for subsequent stages
 FROM python:3.12-alpine3.19 as builder
 
 # Keeps Python from generating .pyc files in the container
