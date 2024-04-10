@@ -1,20 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-// Declare a typedef for useful_function
-typedef int (*FUNC_PTR)(int);
-
-// Parameter is the signature of the method we will pass in
-void int_ptr_function(int (*param)(int)) {
-	printf("[BB] This statement is executed AFTER the parameter function is evaluated!\n");
-	printf("[BB]: Value of function_param is %d\n", param);
-}
-
- void typedef_ptr_function(FUNC_PTR func_parameter) {
-	printf("[CC] This statement is executed AFTER the parameter function is evaluated!\n");
- 	printf("[CC] Value of function_param is %d\n", func_parameter);
- }
-
 // Takes an integer parameter
 int simple_int_function(int param) {
     printf("[AA]: Value of param is %d\n", param);
@@ -184,18 +170,6 @@ int main(void) {
 	(*func_ptr)(22);
 
 	printf("\n");
-
-	// Why the heck are these useful?
-	// You can pass functions as parameters to other functions!
-	// Create a function with the parameter type matching the signature of the
-	// func you want to pass in.
-	int_ptr_function((*func_ptr)(33));
-
-	printf("\n");
-
-	// For readbility, you can declare the function with a typdef'd method
-	// signature
-	typedef_ptr_function((*func_ptr)(44));
 
 	return 0;
 }
