@@ -1,41 +1,113 @@
 '''
 A python script to remind myself that .now() functions are TZ-naiive; explain the difference between .replace() and .astimezone
-
-NOTE: Really only applies to python 3.8 >= x >= 3.13. datetime.now() was fixed. See:
-    DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).utc_now = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
 '''
-import pytz
-import datetime
+import pytz # this is also deprecated; use stdlib (below)
+from datetime import datetime, timezone
+
+def print_timevalue(counter: int, value: datetime):
+    value = value.replace(microsecond=0)
+    print(f"({counter})", value.isoformat())
 
 def timezones_example():
-    local_tz = 'US/Pacific' # - 07:53
-    # local_tz = 'America/Vancouver' # -08:12
+    print_counter = 0
 
-    utc_now = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
-    local_now = datetime.datetime.now().replace(tzinfo=pytz.timezone(local_tz))
+    ########
+    # The deprecated `utcnow` AND new now() function
+    # both create TZ-naiive objects!
 
-    print()
-    print(local_tz)
-    print()
+    deprecated_utc_now = datetime.utcnow()
+    print_timevalue(print_counter, deprecated_utc_now)
+    print_counter += 1
 
-    print(f'UTC NOW  \t{utc_now.isoformat()}')
-    print(f'LOCAL NOW\t{local_now.isoformat()}')
-    # UTC NOW   2024-04-08T01:19:38.314922+00:00
-    # LOCAL NOW 2024-04-08T01:19:38.314932-07:53
-    print("\n")
+    # now(): If optional argument tz is None or not specified, this is like today().
+    #   Return the current local datetime.
+    new_utc_now = datetime.now()
+    print_timevalue(print_counter, new_utc_now)
+    print_counter += 1
 
-    print('AS TIMEZONE')
-    print(utc_now.astimezone(pytz.timezone(local_tz)).isoformat()) # keeps the timestamp, makes NOT naiive
-    print(local_now.astimezone(pytz.timezone(local_tz)).isoformat())
-    # 2024-04-07T18:23:17.879759-07:00
-    # 2024-04-08T01:23:17.879770-07:53
-    print("\n")
+    ## (0) 2024-04-10T05:13:21 # deprecated; correct hour, not TZ-aware
+    ## (1) 2024-04-09T22:13:21 # system time!!
 
-    print('REPLACE')
-    print(utc_now.replace(tzinfo=pytz.timezone(local_tz)).isoformat()) # has some wierd -07:53 / -08:12
-    print(local_now.replace(tzinfo=pytz.timezone(local_tz)).isoformat())
-    # 2024-04-08T01:23:17.879759-07:53
-    # 2024-04-08T01:23:17.879770-07:53
+    ########
+    ## Create TZ-aware objects for UTC
+
+    # previous way
+    deprecated_utc_now_with_tz = datetime.utcnow().replace(tzinfo=pytz.UTC)
+    print_timevalue(print_counter, deprecated_utc_now_with_tz)
+    print_counter += 1
+
+    # style advised in the deprecation notice
+    now_with_stdlib_tz = datetime.now(timezone.utc)
+    print_timevalue(print_counter, now_with_stdlib_tz)
+    print_counter += 1
+
+    # could also use pytz (oslo TZ)
+    # no benefits to using this lib anymore; use stdlib (datetime.timezone)
+    now_with_pytz_tz = datetime.now(pytz.UTC)
+    print_timevalue(print_counter, now_with_pytz_tz)
+    print_counter += 1
+
+    # WARNING: don't just `replace` the timezone...
+    now_with_replace_stdlib = datetime.now().replace(tzinfo=timezone.utc)
+    print_timevalue(print_counter, now_with_replace_stdlib)
+    print_counter += 1
+
+    # these are all correct...
+    ## (2) 2024-04-10T05:13:21+00:00 
+    ## (3) 2024-04-10T05:13:21+00:00 # advised way
+    ## (4) 2024-04-10T05:13:21+00:00
+    
+    ## (5) 2024-04-09T22:13:21+00:00 # incorrect!
+
+    ########
+    # If you merely want to attach a time zone object tz to a datetime dt WITHOUT ADJUSTMENT
+    #   of date and time data, use dt.replace(tzinfo=tz). 
+    # Otherwise, `astimezone`:
+    #   Return a datetime object with new tzinfo attribute tz, adjusting the date and time data
+    #   so the result is the same UTC time as self, but in tz’s local time.
+
+    # convert UTC time to target TZ: PST
+
+    utc_now = datetime.now(timezone.utc)
+    utc_now_naiive = datetime.now()
+    local_tz = 'US/Pacific' # 'America/Vancouver'
+
+    # TODO: replace pytz.
+    #    tz must be an instance of a tzinfo subclass.
+    utc_as_pst = utc_now.astimezone(pytz.timezone(local_tz)) # cannot take string value; pass in PYTZ
+    print_timevalue(print_counter, utc_as_pst)
+    print_counter += 1
+
+    # Changed in version 3.6: The astimezone() method can now be called on naive instances that are
+    # presumed to represent system local time.
+    utc_naiive_as_pst = utc_now_naiive.astimezone(pytz.timezone(local_tz))
+    print_timevalue(print_counter, utc_naiive_as_pst)
+    print_counter += 1
+
+    # these are correct. Different hour than UTC with appropriate TZ offset
+    # can use either TZ-aware or naiive object
+    ## (6) 2024-04-09T22:13:21-07:00
+    ## (7) 2024-04-09T22:13:21-07:00
+
+    ########
+    # What about `localize`? PYTZ specific?
+
+    # NOTE: can't call localize on a TZ-aware datetime
+    # pytz.timezone(local_tz).localize(utc_now)
+
+    beta = pytz.timezone(local_tz).localize(utc_now_naiive)
+    print_timevalue(print_counter, beta)
+    print_counter += 1
+    
+    # also correct
+    ## (8) 2024-04-09T22:13:21-07:00
+
+    charlie = pytz.UTC.localize(utc_now_naiive)
+    print_timevalue(print_counter, charlie)
+    print_counter += 1
+
+    # wrong; this is the system time (PST hour) with a UTC timestamp
+    ## (9) 2024-04-09T22:13:21+00:00
 
 if __name__ == "__main__":
     timezones_example()

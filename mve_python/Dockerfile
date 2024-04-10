@@ -19,6 +19,10 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
+# SEE `timezones.py` - set docker container to non-UTC for validation
+RUN apk add --no-cache tzdata
+ENV TZ America/Vancouver
+
 # Set the working directory. Indicates where all further commands should be run
 # Creates the directory.
 WORKDIR /app
