@@ -1,0 +1,5 @@
+services:
+  composed-app:
+    build:
+      context: .
+    command: /bin/sh

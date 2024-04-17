@@ -39,6 +39,17 @@ $ docker cp crazy_jemison:./src/pyproject.toml ./
 $ python src/getting_started.py
 ```
 
+### Docker compose
+
+Docker compose is... unecessary for this project.
+
+> helps you define and share multi-container applications. With Compose, you can create a YAML file to define the services and with a single command, you can spin everything up or tear it all down.
+
+However, it still has some helpful features like
+
+1. Consistent commands - enter any project with a Dockerfile and run `docker compose up` - no more thinking needed
+2. Simpler commands - just run `docker compose build && docker compose run composed-app` and you're already into the bash container!
+
 ### Other
 
 ```
